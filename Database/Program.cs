@@ -15,9 +15,9 @@ namespace Database
                 db.Database.EnsureCreated();
 
                 var orch = new UserOrch(db);
-                orch.Delete();
-                orch.Create(new User() { Name = "FromConsole", Age = 30 });
-                var users = orch.Read();
+                orch.DeleteAll();
+                orch.Create(new User() { Id = "123", Name = "FromConsole", Age = 30 });
+                var users = orch.ReadAll();
                 Console.WriteLine("Users list:");
                 foreach (User u in users)
                 {

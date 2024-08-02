@@ -1,18 +1,20 @@
-﻿namespace Entities.Abstractions
+﻿using Entities.Models;
+
+namespace Entities.Abstractions
 {
     /// <summary>
     /// CRUD - Create, Read, Update, Delete
     /// </summary>
-    interface IOrchestrator<T>
+    interface IOrchestrator<T> where T : ModelBase
     {
         public void Create(T entity);
         public void Create(IEnumerable<T> entities);
-        public T Read(Guid id);
-        public IEnumerable<T> Read(IEnumerable<Guid> ids);
-        public IEnumerable<T> Read();
-        public void Update(Guid id, T entity);
-        public void Delete(Guid id);
-        public void Delete(IEnumerable<Guid> ids);
-        public void Delete();
+        public T Read(string id);
+        public IEnumerable<T> Read(IEnumerable<string> ids);
+        public IEnumerable<T> ReadAll();
+        public void Update(string id, T entity);
+        public void Delete(string id);
+        public void Delete(IEnumerable<string> ids);
+        public void DeleteAll();
     }
 }
