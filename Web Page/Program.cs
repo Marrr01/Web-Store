@@ -11,6 +11,9 @@ namespace Web_Page
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<ApplicationContext>(ServiceLifetime.Singleton);
             builder.Services.AddSingleton<UserOrch>();
+            builder.Services.AddSingleton<BasketOrch>();
+            builder.Services.AddSingleton<ProductOrch>();
+            builder.Services.AddSingleton<BasketProductOrch>();
             var app = builder.Build();
 
             app.Run(async (context) =>

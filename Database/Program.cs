@@ -8,8 +8,6 @@ namespace Database
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-
             #region test
             using (ApplicationContext db = new ApplicationContext())
             {
@@ -17,50 +15,92 @@ namespace Database
                 db.Database.EnsureCreated();
 
                 var users = new UserOrch(db);
-                users.DeleteAll();
-                users.Create(new User()
+                var baskets = new BasketOrch(db);
+                var products = new ProductOrch(db);
+                var basketsProducts = new BasketProductOrch(db);
+
+                var user = new User()
                 {
                     Id = "amausah",
                     Password = "drowssap",
                     IsAdmin = false
-                });
+                };
+                users.Create(user);
 
-                var products = new ProductOrch(db);
-                products.Create(new Product()
-                {
-                    Id = "Яблоко",
-                    Name = "Яблоко",
-                    Price = 33.00
-                });
-                products.Create(new Product()
-                {
-                    Id = "Груша",
-                    Name = "Груша",
-                    Price = 25.00
-                });
-
-                var baskets = new BasketOrch(db);
-                baskets.Create(new Basket()
+                var apple = new Product()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    User = users.Read("amausah"),
-                    Products = new List<Product>()
-                    {
-                        products.Read("Яблоко"),
-                        products.Read("Груша"),
-                        products.Read("Яблоко")
-                    }
-                });
+                    Name = "Яблоко",
+                    Price = 20.00
+                };
+                var peach = new Product()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Персик",
+                    Price = 35.00
+                };
+                products.Create(apple);
+                products.Create(peach);
 
+                var basket = new Basket()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    User = user,
+                };
+                baskets.Create(basket);
+
+                var apples = new BasketProduct()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ProductAmount = 5,
+                    Basket = basket,
+                    Product = apple
+                };
+                var peaches = new BasketProduct()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ProductAmount = 3,
+                    Basket = basket,
+                    Product = peach
+                };
+                basket.BasketProducts = new List<BasketProduct>()
+                {
+                    apples,
+                    peaches
+                };
+
+                baskets.Update(basket.Id, basket);
+
+                Console.WriteLine("Пользователи:");
+                foreach (var u in users.ReadAll())
+                {
+                    Console.WriteLine($"{u.Id}\t{u.Password}");
+                }
+                Console.WriteLine();
+
+                Console.WriteLine("Корзины:");
+                foreach (var b in baskets.ReadAll())
+                {
+                    Console.WriteLine($"{b.Id}\tэто корзина пользователя {b.User.Id}");
+                }
+                Console.WriteLine();
+
+                Console.WriteLine("Товары:");
+                foreach (var p in products.ReadAll())
+                {
+                    Console.WriteLine($"{p.Id}\t{p.Name}");
+                }
+
+                Console.WriteLine();
                 foreach (var u in users.ReadAll())
                 {
                     Console.WriteLine($"{u.Id}\t{u.Password}");
                     foreach (var b in u.Baskets)
                     {
                         Console.WriteLine($"\t{b.Id}");
-                        foreach (var p in b.Products)
+                        foreach (var bp in b.BasketProducts)
                         {
-                            Console.WriteLine($"\t\t{p.Id}\t{p.Name}");
+                            Console.WriteLine($"\t\t{bp.Product.Name}\t{bp.ProductAmount}");
                         }
                     }
                 }

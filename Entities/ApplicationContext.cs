@@ -8,10 +8,16 @@ namespace Entities
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Basket> Baskets { get; set; } = null!;
         public DbSet<Product> Products { get; set; } = null!;
+        public DbSet<BasketProduct> BasketsProducts { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(@"Data Source=d:\mydb.db");
+            optionsBuilder.UseLazyLoadingProxies().UseSqlite(@"Data Source=d:\mydb.db");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
         }
     }
 }

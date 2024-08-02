@@ -1,12 +1,25 @@
-﻿namespace Entities.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Entities.Models
 {
+    [Table("baskets")]
     public class Basket : ModelBase
     {
-        public User User { get; set; }
+        [Column("is_purchased")]
         public bool IsPurchased { get; set; }
-        public DateTime? PurchaseTime { get; set; }
+
+        [Column("purchase_date")]
+        public DateTime? PurchaseDate { get; set; }
+
+        [Column("is_delivered")]
         public bool IsDelivered { get; set; }
-        public DateTime? DeliveryTime { get; set; }
-        public IEnumerable<Product>? Products { get; set; }
+
+        [Column("delivery_date")]
+        public DateTime? DeliveryDate { get; set; }
+
+
+
+        public virtual User User { get; set; }
+        public virtual List<BasketProduct>? BasketProducts { get; set; }
     }
 }
