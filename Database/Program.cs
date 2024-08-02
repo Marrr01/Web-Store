@@ -10,20 +10,62 @@ namespace Database
         {
             Console.WriteLine("Hello, World!");
 
+            #region test
             using (ApplicationContext db = new ApplicationContext())
             {
+                db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
 
-                var orch = new UserOrch(db);
-                orch.DeleteAll();
-                orch.Create(new User() { Id = "123", Name = "FromConsole", Age = 30 });
-                var users = orch.ReadAll();
-                Console.WriteLine("Users list:");
-                foreach (User u in users)
+                var users = new UserOrch(db);
+                users.DeleteAll();
+                users.Create(new User()
                 {
-                    Console.WriteLine($"{u.Id}\t{u.Name} - {u.Age}");
+                    Id = "amausah",
+                    Password = "drowssap",
+                    IsAdmin = false
+                });
+
+                var products = new ProductOrch(db);
+                products.Create(new Product()
+                {
+                    Id = "Яблоко",
+                    Name = "Яблоко",
+                    Price = 33.00
+                });
+                products.Create(new Product()
+                {
+                    Id = "Груша",
+                    Name = "Груша",
+                    Price = 25.00
+                });
+
+                var baskets = new BasketOrch(db);
+                baskets.Create(new Basket()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    User = users.Read("amausah"),
+                    Products = new List<Product>()
+                    {
+                        products.Read("Яблоко"),
+                        products.Read("Груша"),
+                        products.Read("Яблоко")
+                    }
+                });
+
+                foreach (var u in users.ReadAll())
+                {
+                    Console.WriteLine($"{u.Id}\t{u.Password}");
+                    foreach (var b in u.Baskets)
+                    {
+                        Console.WriteLine($"\t{b.Id}");
+                        foreach (var p in b.Products)
+                        {
+                            Console.WriteLine($"\t\t{p.Id}\t{p.Name}");
+                        }
+                    }
                 }
             }
+            #endregion
         }
     }
 }
