@@ -1,10 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models
 {
-    [Table ("users")]
-    public class User : ModelBase
+    [Table ("users"), PrimaryKey(nameof(Login))]
+    public class User
     {
+        [Column("login")]
+        public string Login { get; set; }
+
         [Column("password")]
         public string Password { get; set; }
 

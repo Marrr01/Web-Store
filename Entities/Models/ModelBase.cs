@@ -5,6 +5,6 @@ namespace Entities.Models
     public class ModelBase
     {
         [Column("id")]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

@@ -14,10 +14,5 @@ namespace Entities
         {
             optionsBuilder.UseLazyLoadingProxies().UseSqlite(@"Data Source=d:\mydb.db");
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-
-        }
     }
 }
