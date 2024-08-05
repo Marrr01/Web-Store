@@ -1,6 +1,7 @@
 ﻿using Entities.Abstractions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Entities.Orchestrators
 {
@@ -49,6 +50,13 @@ namespace Entities.Orchestrators
         }
         public Task<IEnumerable<T>> ReadAsync(IEnumerable<string> ids) => Task.Run(() => Read(ids));
 
+        public IEnumerable<T> Read(Expression<Func<T, bool>> predicate)
+        {
+            Check();
+            return table.Where(predicate);
+        }
+        public Task<IEnumerable<T>> ReadAsync(Expression<Func<T, bool>> predicate) => Task.Run(() => Read(predicate));
+
         public IEnumerable<T> ReadAll()
         {
             Check();
@@ -93,6 +101,15 @@ namespace Entities.Orchestrators
             db.SaveChanges();
         }
         public Task DeleteAsync(IEnumerable<string> ids) => Task.Run(() => Delete(ids));
+
+        public void Delete(Expression<Func<T, bool>> predicate)
+        {
+            Check();
+            var entities = table.Where(predicate);
+            table.RemoveRange(entities);
+            db.SaveChanges();
+        }
+        public Task DeleteAsync(Expression<Func<T, bool>> predicate) => Task.Run(() => Delete(predicate));
 
         public void DeleteAll()
         {
