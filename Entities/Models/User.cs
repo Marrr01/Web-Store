@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Entities.Models
+namespace Models
 {
     [Table ("users"), PrimaryKey(nameof(Login))]
     public class User

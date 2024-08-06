@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Entities.Models
+namespace Models
 {
     [Table("baskets_products"), PrimaryKey(nameof(BasketId), nameof(ProductId))]
     public class BasketProduct

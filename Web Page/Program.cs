@@ -1,6 +1,8 @@
-using Entities;
+using Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Web_Page
+namespace Controllers
 {
     public class Program
     {
@@ -8,13 +10,29 @@ namespace Web_Page
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<ApplicationContext>(ServiceLifetime.Singleton);
-            var app = builder.Build();
-
-            
-            app.Run(async (context) =>
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = AuthOptions.ISSUER,
+                    ValidateAudience = true,
+                    ValidAudience = AuthOptions.AUDIENCE,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                    ValidateIssuerSigningKey = true
+                };
             });
+            builder.Services.AddAuthorization();
+            builder.Services.AddControllers();
+
+            var app = builder.Build();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.MapControllers();
+
+            app.Map("/", () => "hello");
 
             app.Run();
         }

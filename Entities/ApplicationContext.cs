@@ -1,7 +1,6 @@
-﻿using Entities.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Entities
+namespace Models
 {
     public class ApplicationContext : DbContext
     {
@@ -12,7 +11,7 @@ namespace Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseLazyLoadingProxies().UseSqlite(@"Data Source=d:\mydb.db");
+            optionsBuilder/*.UseLazyLoadingProxies()*/.UseSqlite(@"Data Source=d:\mydb.db");
         }
     }
 }

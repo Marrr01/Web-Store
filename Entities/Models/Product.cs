@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Entities.Models
+namespace Models
 {
     [Table("products")]
     public class Product : ModelBase

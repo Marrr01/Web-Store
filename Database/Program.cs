@@ -1,5 +1,4 @@
-﻿using Entities;
-using Entities.Models;
+﻿using Models;
 
 namespace Database
 {
