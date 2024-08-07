@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Models
 {
@@ -11,7 +12,9 @@ namespace Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder/*.UseLazyLoadingProxies()*/.UseSqlite(@"Data Source=d:\mydb.db");
+            optionsBuilder/*.UseLazyLoadingProxies()*/
+                .UseSqlite(@"Data Source=d:\mydb.db")
+                .LogTo(s => Debug.WriteLine(s));
         }
     }
 }
