@@ -13,26 +13,12 @@ namespace Controllers
         [HttpGet, Route("api/users/logins"), Authorize]
         public IActionResult GetAllLogins()
         {
-            // Операторы запросов, var - IQueryable<string>
-            var logins1 = from u in db.Users
-                          select u.Login;
+            var logins = db.Users.Select(u => u.Login);
             // SQL запрос:
             // SELECT "u"."login"
             // FROM "users" AS "u"
 
-            // Методы расширения, var - IQueryable<string>
-            var logins2 = db.Users.Select(u => u.Login);
-            // SQL запрос:
-            // SELECT "u"."login"
-            // FROM "users" AS "u"
-
-            var selector = new Func<User, string>(u => u.Login);
-            // Методы расширения, var - IEnumerable<string>
-            var logins3 = db.Users.Select(selector);
-            // SQL запрос:
-            // SELECT "u"."login", "u"."age", "u"."email", "u"."is_admin", "u"."name", "u"."password", "u"."surname"
-            // FROM "users" AS "u"
-            return Json(logins1);
+            return Json(logins);
         }
 
         [HttpGet, Route("api/users/all"), Authorize]
