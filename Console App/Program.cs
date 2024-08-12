@@ -1,6 +1,7 @@
-﻿using Models;
+﻿using Database;
+using Models;
 
-namespace Database
+namespace Console_App
 {
     internal class Program
     {

@@ -1,4 +1,5 @@
-﻿using HotChocolate.Data.Sorting;
+﻿using Database;
+using HotChocolate.Data.Sorting;
 using Microsoft.EntityFrameworkCore;
 using Models;
 

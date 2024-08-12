@@ -1,4 +1,5 @@
-﻿using HotChocolate.Subscriptions;
+﻿using Database;
+using HotChocolate.Subscriptions;
 using Models;
 
 namespace GraphQL_App
