@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphQL App", "GraphQL App\GraphQL App.csproj", "{EA4A330C-28D6-4F56-B446-CE90FF9595B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{F630B47C-1B64-428D-91EC-23FFF2071286}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Database.csproj", "{F630B47C-1B64-428D-91EC-23FFF2071286}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL App.Tests", "GraphQL App.Tests\GraphQL App.Tests.csproj", "{8A3B0BAC-8AC6-4372-9B57-43B1B39AC6CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{F630B47C-1B64-428D-91EC-23FFF2071286}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F630B47C-1B64-428D-91EC-23FFF2071286}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F630B47C-1B64-428D-91EC-23FFF2071286}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A3B0BAC-8AC6-4372-9B57-43B1B39AC6CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A3B0BAC-8AC6-4372-9B57-43B1B39AC6CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A3B0BAC-8AC6-4372-9B57-43B1B39AC6CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A3B0BAC-8AC6-4372-9B57-43B1B39AC6CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

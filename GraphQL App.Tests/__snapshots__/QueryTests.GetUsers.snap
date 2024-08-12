@@ -1,0 +1,10 @@
+﻿{
+  "data": {
+    "users": [
+      {
+        "login": "usah",
+        "password": "123"
+      }
+    ]
+  }
+}
