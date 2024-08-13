@@ -1,0 +1,90 @@
+{
+  "data": {
+    "users": [
+      {
+        "login": "login 1",
+        "password": "password",
+        "baskets": [
+          {
+            "basketProducts": [
+              {
+                "productAmount": 1,
+                "product": {
+                  "name": "Product 1",
+                  "price": 10
+                }
+              },
+              {
+                "productAmount": 2,
+                "product": {
+                  "name": "Product 2",
+                  "price": 20
+                }
+              }
+            ]
+          },
+          {
+            "basketProducts": [
+              {
+                "productAmount": 1,
+                "product": {
+                  "name": "Product 1",
+                  "price": 10
+                }
+              },
+              {
+                "productAmount": 2,
+                "product": {
+                  "name": "Product 2",
+                  "price": 20
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "login": "login 2",
+        "password": "password",
+        "baskets": [
+          {
+            "basketProducts": [
+              {
+                "productAmount": 1,
+                "product": {
+                  "name": "Product 1",
+                  "price": 10
+                }
+              },
+              {
+                "productAmount": 2,
+                "product": {
+                  "name": "Product 2",
+                  "price": 20
+                }
+              }
+            ]
+          },
+          {
+            "basketProducts": [
+              {
+                "productAmount": 1,
+                "product": {
+                  "name": "Product 1",
+                  "price": 10
+                }
+              },
+              {
+                "productAmount": 2,
+                "product": {
+                  "name": "Product 2",
+                  "price": 20
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

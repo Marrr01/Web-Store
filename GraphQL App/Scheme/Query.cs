@@ -1,5 +1,4 @@
 ﻿using Database;
-using HotChocolate.Data.Sorting;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -28,7 +27,6 @@ namespace GraphQL_App
             return db.BasketsProducts.Include(bp => bp.Product);
         }
 
-        
         [UsePaging(MaxPageSize = 3, IncludeTotalCount = true)]
         [UseProjection]
         [UseFiltering]

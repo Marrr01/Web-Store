@@ -2,8 +2,10 @@
 using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Execution;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.CompilerServices;
+using Models;
+using Moq;
 
 namespace GraphQL_App.Tests
 {
@@ -11,8 +13,15 @@ namespace GraphQL_App.Tests
     {
         static TestServices()
         {
+            var mock = new Mock<ApplicationContext>();
+            mock.SetupGet(db => db.Users).Returns(GetQueryableMockDbSet(GetUsers()));
+            mock.SetupGet(db => db.Baskets).Returns(GetQueryableMockDbSet(GetBaskets()));
+            mock.SetupGet(db => db.BasketsProducts).Returns(GetQueryableMockDbSet(GetBasketProducts()));
+            mock.SetupGet(db => db.Products).Returns(GetQueryableMockDbSet(GetProducts()));
+
             Services = new ServiceCollection()
-                .AddDbContext<ApplicationContext>()
+                //.AddDbContext<ApplicationContext>()
+                .AddScoped((x) => mock.Object)
                 .AddSingleton(
                     sp => new RequestExecutorProxy(
                         sp.GetRequiredService<IRequestExecutorResolver>(),
@@ -34,48 +43,112 @@ namespace GraphQL_App.Tests
             Executor = Services.GetRequiredService<RequestExecutorProxy>();
         }
 
+        private static DbSet<T> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
+        {
+            var queryable = sourceList.AsQueryable();
+
+            var dbSet = new Mock<DbSet<T>>();
+            dbSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryable.Provider);
+            dbSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
+            dbSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
+            dbSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(() => queryable.GetEnumerator());
+            dbSet.Setup(d => d.Add(It.IsAny<T>())).Callback<T>((s) => sourceList.Add(s));
+
+            return dbSet.Object;
+        }
+
         public static IServiceProvider Services { get; }
 
         public static RequestExecutorProxy Executor { get; }
 
-        public static async Task<string> ExecuteRequestAsync(
-            Action<IQueryRequestBuilder> configureRequest,
-            CancellationToken cancellationToken = default)
+        public static async Task<IExecutionResult> ExecuteRequestAsync(
+        Action<IQueryRequestBuilder> configureRequest,
+        CancellationToken cancellationToken = default)
         {
-            await using var scope = Services.CreateAsyncScope();
+            var scope = Services.CreateAsyncScope();
 
             var requestBuilder = new QueryRequestBuilder();
             requestBuilder.SetServices(scope.ServiceProvider);
             configureRequest(requestBuilder);
             var request = requestBuilder.Create();
 
-            await using var result = await Executor.ExecuteAsync(request, cancellationToken);
-
-            result.ExpectQueryResult();
-
-            return result.ToJson();
+            var result = await Executor.ExecuteAsync(request, cancellationToken);
+            result.RegisterForCleanup(scope.DisposeAsync);
+            return result;
         }
 
-        public static async IAsyncEnumerable<string> ExecuteRequestAsStreamAsync(
-            Action<IQueryRequestBuilder> configureRequest,
-            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        #region Данные для мока
+        private static List<User> GetUsers()
         {
-            await using var scope = Services.CreateAsyncScope();
-
-            var requestBuilder = new QueryRequestBuilder();
-            requestBuilder.SetServices(scope.ServiceProvider);
-            configureRequest(requestBuilder);
-            var request = requestBuilder.Create();
-
-            await using var result = await Executor.ExecuteAsync(request, cancellationToken);
-
-            await foreach (var element in result.ExpectResponseStream().ReadResultsAsync().WithCancellation(cancellationToken))
+            return new List<User>()
             {
-                await using (element)
+                new User()
                 {
-                    yield return element.ToJson();
+                    Login = "login 1",
+                    Password = "password",
+                    Baskets = GetBaskets()
+                },
+                new User()
+                {
+                    Login = "login 2",
+                    Password = "password",
+                    Baskets = GetBaskets()
                 }
-            }
+            };
         }
+
+        private static List<Product> GetProducts()
+        {
+            return new List<Product>()
+            {
+                new Product()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Product 1",
+                    Price = 10
+                },
+                new Product()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Product 2",
+                    Price = 20
+                }
+            };
+        }
+
+        private static List<BasketProduct> GetBasketProducts()
+        {
+            return new List<BasketProduct>()
+            {
+                new BasketProduct()
+                {
+                    Product = GetProducts()[0],
+                    ProductAmount = 1
+                },
+                new BasketProduct()
+                {
+                    Product = GetProducts()[1],
+                    ProductAmount = 2
+                }
+            };
+        }
+
+        private static List<Basket> GetBaskets()
+        {
+            return new List<Basket>()
+            {
+                new Basket()
+                {
+                    Id = Guid.NewGuid(),
+                    BasketProducts = GetBasketProducts()
+                },
+                new Basket()
+                {
+                    Id = Guid.NewGuid(),
+                    BasketProducts = GetBasketProducts()
+                }
+            };
+        }
+        #endregion
     }
 }

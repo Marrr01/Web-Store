@@ -1,4 +1,4 @@
-﻿using Snapshooter.Xunit;
+﻿using CookieCrumble;
 using Xunit;
 
 namespace GraphQL_App.Tests
@@ -6,18 +6,26 @@ namespace GraphQL_App.Tests
     public class QueryTests
     {
         [Fact]
-        public async Task SchemaChangeTest()
+        public async Task GetUsers_CorrectQuery_ReturnsProductsInUsersBaskets()
         {
-            var schema = await TestServices.Executor.GetSchemaAsync(default);
-            schema.ToString().MatchSnapshot();
-        }
-
-        [Fact]
-        public async Task GetUsers()
-        {
-            var result = await TestServices.ExecuteRequestAsync(
-            b => b.SetQuery("{ users { login password } }"));
-
+            await using var result = await TestServices.ExecuteRequestAsync(b => b.SetQuery(
+                """
+                query {
+                  users {
+                    login
+                    password
+                    baskets {
+                      basketProducts {
+                        productAmount
+                        product {
+                          name
+                          price
+                        }
+                      }
+                    }
+                  }
+                }
+                """));
             result.MatchSnapshot();
         }
     }
