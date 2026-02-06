@@ -9,6 +9,7 @@ namespace Console_App
         {
             var t1 = 1;
             var t2 = 2;
+            var t3 = 3;
 
             #region test
             using (ApplicationContext db = new ApplicationContext())
