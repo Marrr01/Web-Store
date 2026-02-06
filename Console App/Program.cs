@@ -8,6 +8,7 @@ namespace Console_App
         static void Main(string[] args)
         {
             var t1 = 1;
+            var t2 = 2;
 
             #region test
             using (ApplicationContext db = new ApplicationContext())
